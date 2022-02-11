@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from random import randint
 
 
 DATA_FOLDER = Path(__file__).parent.parent / "data"
@@ -36,3 +37,11 @@ class JsonLoader:
         """
         found = filter(lambda x: x[key] == value, self.values)
         return next(found, None) if first else list(found)
+
+    def get_random(self, key):
+        """Get a random item by a key
+
+        Arguments:
+            key {str} -- The key to search by
+        """
+        return self.values[randint(0, len(self.values) - 1)][key]

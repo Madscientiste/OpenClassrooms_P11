@@ -15,7 +15,7 @@ def create_app(config=None):
         app.config.update(config)
 
     # making sure the folder exist
-    pathlib.Path(app.instance_path).mkdir(parents=True, exist_ok=True)
+    # pathlib.Path(app.instance_path).mkdir(parents=True, exist_ok=True)
 
     @app.errorhandler(ClientError)
     def handle_exception(e):
