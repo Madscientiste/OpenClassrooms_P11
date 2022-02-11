@@ -22,7 +22,7 @@ def create_app(config=None):
 
     @app.route("/summary", methods=["POST"])
     def summary():
-        club = clubs.get_by("email", request.form["email"])
+        club = clubs.get_by("email", request.form["email"], first=True)
 
         if club:
             return render_template("welcome.html", club=club, competitions=competitions)
