@@ -8,11 +8,12 @@
 
 <body>
     <h2>{{competition['name']}}</h2>
-    Places available: {{competition['seats_available']}}
+    Seats available: {{competition['seats_available']}}
     <form action="/confirm_booking" method="post">
         <input type="hidden" name="club" value="{{club['name']}}">
         <input type="hidden" name="competition" value="{{competition['name']}}">
-        <label for="places">How many places?</label><input type="number" name="places" id="" />
+        <label for="seats">How many seats?</label>
+        <input type="number" name="seats" id="" />
         <button type="submit">Book</button>
     </form>
 </body>
