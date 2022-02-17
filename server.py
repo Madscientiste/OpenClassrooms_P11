@@ -31,11 +31,18 @@ def create_app(config=None):
 
     @app.route("/confirm_booking", methods=["POST"])
     def confirm_booking():
-        competition = [c for c in competitions if c["name"] == request.form["competition"]][0]
-        club = [c for c in clubs if c["name"] == request.form["club"]][0]
-        seatsRequired = int(request.form["seats"])
-        competition["seats_available"] = int(competition["seats_available"]) - seatsRequired
-        flash("Great-booking complete!")
+        competition = competitions.get_by("name", request.form["competition"], first=True)
+        club = clubs.get_by("name", request.form["club"], first=True)
+
+        requested_seats = int(request.form["seats"])
+        seats_available = int(competition["seats_available"])
+
+        if requested_seats > seats_available:
+            flash("Sorry, we don't have enough seats available for that competition.")
+        else:
+            competition["seats_available"] = seats_available - requested_seats
+            flash("Great-booking complete!")
+
         return render_template("welcome.html", club=club, competitions=competitions)
 
     @app.route("/book/<competition>/<club>")

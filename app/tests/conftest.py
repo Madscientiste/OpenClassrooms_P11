@@ -1,7 +1,10 @@
 import pytest
 
-from app.data import clubs, competitions
+from app.utilities import JsonLoader
 from server import create_app
+
+clubs = JsonLoader("clubs", testing=True)
+competitions = JsonLoader("competitions", testing=True)
 
 
 @pytest.fixture
@@ -13,4 +16,4 @@ def client():
 
 @pytest.fixture
 def data():
-    return {"clubs": clubs, "competitions": competitions}
+    return {"clubs" : clubs, "competitions" : competitions}

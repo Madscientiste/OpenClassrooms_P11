@@ -5,7 +5,7 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Python: Flask",
+			"name": "Debug Flask",
 			"type": "python",
 			"request": "launch",
 			"module": "flask",
@@ -15,6 +15,12 @@
 			},
 			"args": ["run", "--no-debugger", "--no-reload"],
 			"jinja": true
+		},
+		{
+			"name": "Debug Tests",
+			"type": "python",
+			"request": "launch",
+			"module": "pytest"
 		}
 	]
 }

@@ -9,8 +9,9 @@ DATA_FOLDER = Path(__file__).parent.parent / "data"
 class JsonLoader:
     """Load a json from /data/, and handles basic operations"""
 
-    def __init__(self, target):
+    def __init__(self, target, testing=False):
         self.target = target
+        self.testing = testing
         self.values = self._load_json()
 
     def __iter__(self):
@@ -18,24 +19,26 @@ class JsonLoader:
 
     def _load_json(self):
         with open(str(DATA_FOLDER / self.target) + ".json") as file:
-            self.values = json.load(file)[self.target]
+            load_name = "test" if self.testing else self.target
+            self.values = json.load(file)[load_name]
             return self.values
-
-    def _update_json(self):
-        with open(str(DATA_FOLDER / self.target) + ".json", "w") as file:
-            json.dump(self.values, file)
 
     def get_by(self, key, value, first=False):
         """Find an item by a key and value. Returns if nothing is found
 
         Arguments:
             key {str} -- The key to search by
-            value {str} -- The value to search for
+            value {str} -- The value to search for, if a function is passed, it will be used to filter the values
 
         Keyword Arguments:
             first {bool} -- If True, return the first club found (default: {False})
         """
-        found = filter(lambda x: x[key] == value, self.values)
+
+        if callable(value):
+            found = iter([v for v in self.values if value(v[key])])
+        else:
+            found = filter(lambda x: x[key] == value, self.values)
+
         return next(found, None) if first else list(found)
 
     def get_random(self, key):
