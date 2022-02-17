@@ -1,6 +1,11 @@
 {
 	"clubs": [
 		{
+			"name": "UPNP port",
+			"email": "usb@port.comm",
+			"points": "0"
+		},
+		{
 			"name": "Simply Lift",
 			"email": "john@simplylift.co",
 			"points": "2"
@@ -17,6 +22,11 @@
 		}
 	],
 	"test": [
+		{
+			"name": "UPNP port",
+			"email": "usb@port.comm",
+			"points": "0"
+		},
 		{
 			"name": "Simply Lift",
 			"email": "john@simplylift.co",

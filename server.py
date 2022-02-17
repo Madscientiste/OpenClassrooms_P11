@@ -44,6 +44,8 @@ def create_app(config=None):
             flash("Sorry, we can only book up to 12 seats at a time.")
         elif competition_date < datetime.now():
             flash("Sorry, that competition has already passed.")
+        elif club_points < 1:
+            flash("Sorry, you don't have enough points to book seats.")
         else:
             competition["seats_available"] = seats_available - requested_seats
             club["points"] = club_points - 1

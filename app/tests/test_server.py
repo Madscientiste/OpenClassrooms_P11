@@ -18,7 +18,8 @@ def test_login(client, data):
 
 
 def test_booking_case1(client, data):
-    # She lift has 16 points, spring festival has only 2 seats available
+    """Test if we can book more seats than are available"""
+
     club = data["clubs"].get_by("name", "She Lifts", first=True)
     competition = data["competitions"].get_by("name", "Spring Festival", first=True)
 
@@ -37,7 +38,8 @@ def test_booking_case1(client, data):
 
 
 def test_booking_case2(client, data):
-    # She lift has 16 points, AYAYA Festival has 16 seats available
+    """Test if we can book more than 12 seats at once"""
+
     club = data["clubs"].get_by("name", "She Lifts", first=True)
     competition = data["competitions"].get_by("name", "AYAYA Festival", first=True)
 
@@ -56,7 +58,8 @@ def test_booking_case2(client, data):
 
 
 def test_booking_case3(client, data):
-    # She lift has 16 points, IBM 5100 Competition has 16 seats available
+    """Test if we can book a competition that has already passed"""
+
     club = data["clubs"].get_by("name", "She Lifts", first=True)
     competition = data["competitions"].get_by("name", "IBM 5100 Competition", first=True)
 
@@ -72,3 +75,44 @@ def test_booking_case3(client, data):
 
     assert res.status_code == 200, "didn't return 200"
     assert b"Sorry, that competition has already passed." in res.data
+
+
+def test_booking_case4(client, data):
+    """Test if the points are correctly deducted after a booking"""
+
+    club = data["clubs"].get_by("name", "She Lifts", first=True)
+    competition = data["competitions"].get_by("name", "Futuristic Friday", first=True)
+
+    res = client.post(
+        "/confirm_booking",
+        data={
+            "competition": competition["name"],
+            "club": club["name"],
+            "seats": 4,
+        },
+        follow_redirects=True,
+    )
+
+    assert res.status_code == 200, "didn't return 200"
+    assert b"Great-booking complete!" in res.data
+    assert b"Points available: 15" in res.data
+
+
+def test_booking_case5(client, data):
+    """Test if we can book if we don't have enough club points"""
+
+    club = data["clubs"].get_by("name", "UPNP port", first=True)
+    competition = data["competitions"].get_by("name", "Futuristic Friday", first=True)
+
+    res = client.post(
+        "/confirm_booking",
+        data={
+            "competition": competition["name"],
+            "club": club["name"],
+            "seats": 4,
+        },
+        follow_redirects=True,
+    )
+
+    assert res.status_code == 200, "didn't return 200"
+    assert b"Sorry, you don&#39;t have enough points to book seats." in res.data
