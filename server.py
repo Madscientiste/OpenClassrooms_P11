@@ -1,7 +1,6 @@
-import pathlib
 from flask import Flask, render_template, request, redirect, flash, url_for
-
-from app.data import clubs, competitions
+from datetime import datetime
+from dateutil.parser import parse
 
 
 def create_app(config=None):
@@ -10,11 +9,11 @@ def create_app(config=None):
 
     if not config:
         app.config.from_pyfile("config.py", silent=True)
+        from app.data import clubs, competitions
     else:
         app.config.update(config)
-
-    # making sure the folder exist
-    # pathlib.Path(app.instance_path).mkdir(parents=True, exist_ok=True)
+        clubs = config["clubs"]
+        competitions = config["competitions"]
 
     @app.route("/")
     def index():
@@ -34,6 +33,7 @@ def create_app(config=None):
         competition = competitions.get_by("name", request.form["competition"], first=True)
         club = clubs.get_by("name", request.form["club"], first=True)
 
+        competition_date = parse(competition["date"])
         requested_seats = int(request.form["seats"])
         seats_available = int(competition["seats_available"])
 
@@ -41,6 +41,8 @@ def create_app(config=None):
             flash("Sorry, we don't have enough seats available for that competition.")
         elif requested_seats > 12:
             flash("Sorry, we can only book up to 12 seats at a time.")
+        elif competition_date < datetime.now():
+            flash("Sorry, that competition has already passed.")
         else:
             competition["seats_available"] = seats_available - requested_seats
             flash("Great-booking complete!")

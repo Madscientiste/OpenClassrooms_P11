@@ -37,7 +37,26 @@ def test_booking_case1(client, data):
 
 
 def test_booking_case2(client, data):
-    # She lift has 16 points, spring festival has 16 seats available
+    # She lift has 16 points, AYAYA Festival has 16 seats available
+    club = data["clubs"].get_by("name", "She Lifts", first=True)
+    competition = data["competitions"].get_by("name", "AYAYA Festival", first=True)
+
+    res = client.post(
+        "/confirm_booking",
+        data={
+            "competition": competition["name"],
+            "club": club["name"],
+            "seats": 14,
+        },
+        follow_redirects=True,
+    )
+
+    assert res.status_code == 200, "didn't return 200"
+    assert b"Sorry, we can only book up to 12 seats at a time." in res.data
+
+
+def test_booking_case3(client, data):
+    # She lift has 16 points, IBM 5100 Competition has 16 seats available
     club = data["clubs"].get_by("name", "She Lifts", first=True)
     competition = data["competitions"].get_by("name", "IBM 5100 Competition", first=True)
 
@@ -46,10 +65,10 @@ def test_booking_case2(client, data):
         data={
             "competition": competition["name"],
             "club": club["name"],
-            "seats": 16,
+            "seats": 8,
         },
         follow_redirects=True,
     )
 
     assert res.status_code == 200, "didn't return 200"
-    assert b"Sorry, we can only book up to 12 seats at a time." in res.data
+    assert b"Sorry, that competition has already passed." in res.data

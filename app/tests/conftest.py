@@ -9,11 +9,11 @@ competitions = JsonLoader("competitions", testing=True)
 
 @pytest.fixture
 def client():
-    app = create_app({"TESTING": True})
+    app = create_app({"TESTING": True, "clubs": clubs, "competitions": competitions})
     with app.test_client() as client:
         yield client
 
 
 @pytest.fixture
 def data():
-    return {"clubs" : clubs, "competitions" : competitions}
+    return {"clubs": clubs, "competitions": competitions}
