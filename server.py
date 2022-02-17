@@ -63,6 +63,10 @@ def create_app(config=None):
             flash("Something went wrong-please try again")
             return render_template("welcome.html", club=club, competitions=competitions)
 
+    @app.route("/clubs")
+    def view_clubs():
+        return render_template("clubs.html", clubs=clubs)
+
     @app.route("/logout")
     def logout():
         return redirect(url_for("index"))
