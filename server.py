@@ -39,6 +39,8 @@ def create_app(config=None):
 
         if requested_seats > seats_available:
             flash("Sorry, we don't have enough seats available for that competition.")
+        elif requested_seats > 12:
+            flash("Sorry, we can only book up to 12 seats at a time.")
         else:
             competition["seats_available"] = seats_available - requested_seats
             flash("Great-booking complete!")

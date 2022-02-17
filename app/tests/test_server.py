@@ -17,11 +17,9 @@ def test_login(client, data):
     assert res.status_code == 401
 
 
-def test_booking(client, data):
-    # shouldn't be able to book more than 12 seats & from whats available
-    # Shouldn't be able to book if they don't have enough points (1 point = 1 competition)
-    # Shouldn't book a competition if it's date has passed
-    club = data["clubs"].get_by("name", "Simply Lift", first=True)
+def test_booking_case1(client, data):
+    # She lift has 16 points, spring festival has only 2 seats available
+    club = data["clubs"].get_by("name", "She Lifts", first=True)
     competition = data["competitions"].get_by("name", "Spring Festival", first=True)
 
     res = client.post(
@@ -29,10 +27,29 @@ def test_booking(client, data):
         data={
             "competition": competition["name"],
             "club": club["name"],
-            "seats": 999,
+            "seats": 14,
         },
         follow_redirects=True,
     )
 
     assert res.status_code == 200, "didn't return 200"
     assert b"Sorry, we don&#39;t have enough seats available for that competition." in res.data
+
+
+def test_booking_case2(client, data):
+    # She lift has 16 points, spring festival has 16 seats available
+    club = data["clubs"].get_by("name", "She Lifts", first=True)
+    competition = data["competitions"].get_by("name", "IBM 5100 Competition", first=True)
+
+    res = client.post(
+        "/confirm_booking",
+        data={
+            "competition": competition["name"],
+            "club": club["name"],
+            "seats": 16,
+        },
+        follow_redirects=True,
+    )
+
+    assert res.status_code == 200, "didn't return 200"
+    assert b"Sorry, we can only book up to 12 seats at a time." in res.data
