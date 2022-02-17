@@ -33,6 +33,7 @@ def create_app(config=None):
         competition = competitions.get_by("name", request.form["competition"], first=True)
         club = clubs.get_by("name", request.form["club"], first=True)
 
+        club_points = int(club["points"])
         competition_date = parse(competition["date"])
         requested_seats = int(request.form["seats"])
         seats_available = int(competition["seats_available"])
@@ -45,6 +46,7 @@ def create_app(config=None):
             flash("Sorry, that competition has already passed.")
         else:
             competition["seats_available"] = seats_available - requested_seats
+            club["points"] = club_points - 1
             flash("Great-booking complete!")
 
         return render_template("welcome.html", club=club, competitions=competitions)
