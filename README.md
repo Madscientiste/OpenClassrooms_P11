@@ -1,5 +1,5 @@
 
-# Test/Locust Report
+# Locust/Test Report
 
 <p align="center">
     <img src="./screenshots/locust.png">
