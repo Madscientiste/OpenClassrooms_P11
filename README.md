@@ -1,10 +1,45 @@
 
-# Locust/Test Report
+
+
+# Reports (BEFORE)
+
+## Locust
+<p align="center">
+    <img src="./screenshots/locust_chart_old.png">
+    <img src="./screenshots/locust_routes_old.png">
+</p>
+
+## Pytest
 
 <p align="center">
-    <img src="./screenshots/locust.png">
+    <img src="./screenshots/pytest_old.png">
+    <img src="./screenshots/coverage_old.png">
+</p>
+
+# After
+
+## Locust
+
+<p align="center">
+    <img src="./screenshots/locust_chart.png">
+    <img src="./screenshots/locust_routes.png">
+</p>
+
+## Pytest
+
+<p align="center">
     <img src="./screenshots/pytest.png">
 </p>
+
+## Coverage report
+<p align="center">
+    <img src="./screenshots/coverage.png">
+</p>
+
+---
+
+<br>
+<br>
 
 # gudlift-registration
 
